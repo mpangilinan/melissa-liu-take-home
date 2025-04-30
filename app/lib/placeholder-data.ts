@@ -47,7 +47,25 @@ const contacts = [
 ];
 
 // TODO: Generate a years worth of random pays using the contacts above
-const pays = [];
+const pays = [
+  {
+    id: 'ac5a956f-29ab-4166-b9ae-820b6d3e30c9',
+    senderId: '410544b2-4001-4271-9855-fec4b6a6442a', // user
+    recipientId: 'd6e15727-9fe1-4961-8c5b-ea44a9bd81aa', // Evil Rabbit
+    amount: 1200,
+    date: '2025-05-01',
+    status: 'paid',
+    memo: 'rent'
+  },
+  {
+    id: '7b490506-18ee-4922-8d06-d934d8b5c690',
+    senderId: 'd6e15727-9fe1-4961-8c5b-ea44a9bd81aa', // Evil Rabbit
+    recipientId: '3958dc9e-742f-4377-85e9-fec4b6a6442a', // Lee Robinson
+    amount: 1200,
+    date: '2025-05-01',
+    status: 'pending'
+  }
+];
 
 // TODO: After you generate pays, calculate the activity for the respective months
 const activity = [
@@ -64,5 +82,7 @@ const activity = [
   { month: 'Nov', activity: 3000 },
   { month: 'Dec', activity: 4800 },
 ];
+
+const users = [user]
 
 export { users, contacts, pays, activity };

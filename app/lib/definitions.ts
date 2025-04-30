@@ -19,6 +19,12 @@ export type Contact = {
 export type Pay = {
   id: string;
   // TODO: build out what other fields this should have
+  senderId: string;
+  recipientId: string;
+  amount: number;
+  date: string;
+  status: 'pending' | 'paid',
+  memo?: string;
 };
 
 export type Activity = {

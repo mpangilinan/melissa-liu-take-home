@@ -1,6 +1,7 @@
 import { useReducer } from "react";
 import {formatCurrency} from './utils';
-import {contacts, pays, activity} from "@/app/lib/placeholder-data";
+// import {contacts, pays, activity} from "@/app/lib/placeholder-data";
+import {contacts, pays, activity} from "./placeholder-data";
 
 export async function fetchActivity() {
   try {
@@ -89,7 +90,8 @@ export async function fetchPayById(id: string) {
   try {
 
     // TODO: return this pay
-    return undefined;
+    return pays.find((pay) =>  pay.id === id)
+
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch pay.');
