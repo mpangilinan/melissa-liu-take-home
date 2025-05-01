@@ -25,14 +25,14 @@ interface Contact {
 interface Pay {
   id: string;
   amount: number;
-  // TODO: fill in 
+  // TODO: fill in
 }
 ```
 
 # Required operations
 
-1. Pays have been partially defined. Add fields you would feel relevant for querying purposes. Think of pays similar to any p2p you are familiar with. 
-2. Generate random pays to and from the pre-populated contacts for the months of a single year. 
+1. Pays have been partially defined. Add fields you would feel relevant for querying purposes. Think of pays similar to any p2p you are familiar with.
+2. Generate random pays to and from the pre-populated contacts for the months of a single year.
 3. Incorporate into routes and pre-made UIs by building out the queries in memory.
 4. Set up create and edit/action pay. (Remember, the UI will need updating per your `pay` model)
 5. Commit and share! Feel free to leave notes in your thought process.
@@ -44,14 +44,14 @@ interface Pay {
 
 ### Hints
 
-Boot up the app. Navigate to the dashboard. Most of these cards will show empty data. 
+Boot up the app. Navigate to the dashboard. Most of these cards will show empty data.
 After you generate your data, fill these in. Replace `Recent Activity` with your data.
 
-Click to the other routes. 
+Click to the other routes.
 
 `Pays` will have a table that should have more columns. `Create Pay` will probably require more fields.
 
-`Contacts` will use the contacts we've provided but the aggregation of data you've created. 
+`Contacts` will use the contacts we've provided but the aggregation of data you've created.
 
 There are `TODO`s. Try to get to them all.
 
@@ -60,13 +60,28 @@ There are `TODO`s. Try to get to them all.
 - Node version - v18.18.0 or higher for this version of Next.js
 
 # Candidate README
+
 ## Bootstrap instructions
-*Replace this: To run this locally, do the following (if anything)*
+
+```
+npm run dev
+```
+
+some libraries I installed:
+
+- @types/uuid, for generating UUIDs
+- jest, for mocking data in unit tests
+- eslint, for lint warnings
 
 ## Design considerations
-*Replace this: I decided to build X for Y reasons...*
+
+_Replace this: I decided to build X for Y reasons..._
 
 - Wallets
 - Amount
 - Potential enhancements
 - Miscellaneous
+
+## Assumptions
+
+- Users cannot pay themselves, so a `Pay` object will always have a different sender from recipient

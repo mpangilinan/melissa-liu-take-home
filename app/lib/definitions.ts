@@ -19,8 +19,8 @@ export type Contact = {
 export type Pay = {
   id: string;
   // TODO: build out what other fields this should have
-  senderId: string;
-  recipientId: string;
+  sender: Contact;
+  recipient: Contact;
   amount: number;
   date: string;
   status: 'pending' | 'paid',

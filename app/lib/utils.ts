@@ -1,4 +1,6 @@
-import { Activity } from './definitions';
+import { Activity, Contact } from './definitions';
+import {v4 as uuidv4} from 'uuid';
+import { contacts } from './placeholder-data';
 
 export const formatCurrency = (amount: number) => {
   return (amount / 100).toLocaleString('en-US', {
@@ -67,3 +69,47 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
     totalPages,
   ];
 };
+
+const getRandomUserWithExclusion = (contacts: Contact[], excludeContact?: Contact): Contact => {
+    const possibleContacts = contacts.filter((c) => c != excludeContact)
+    const index = Math.floor(Math.random() * possibleContacts.length);
+    return possibleContacts[index];
+  };
+
+const getRandomDate = (start: string, end: string): string => {
+    const startDate = new Date(start)
+    const endDate = new Date(end)
+    const randomTime = startDate.getTime() + Math.random() * (endDate.getTime() - startDate.getTime());
+    const date = new Date(randomTime);
+    return date.toISOString().split('T')[0]; // 'yyyy-mm-dd'
+}
+
+type CreateRandomPaysArgs = {
+  totalPays?: number,
+  sender?: Contact,
+  recipient?: Contact,
+  maxPayAmount?: number,
+  start?: string,
+  end?: string,
+};
+
+export const createRandomPays = ({
+  totalPays=5,
+  sender,
+  recipient,
+  maxPayAmount=250000,
+  start='2024-06-01',
+  end='2025-05-31'
+}: CreateRandomPaysArgs): Pay[] => {
+
+  const paySender = sender || getRandomUserWithExclusion(contacts);
+
+  return Array.from({ length: totalPays }, (_, i) => ({
+    id: uuidv4(),
+    sender: paySender,
+    recipient: recipient || getRandomUserWithExclusion(contacts, paySender),
+    amount: Math.floor(Math.random() * maxPayAmount),
+    date: getRandomDate(start, end),
+    status: 'paid',
+  }))
+}
