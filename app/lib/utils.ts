@@ -1,6 +1,5 @@
 import { Activity, Contact } from './definitions';
 import {v4 as uuidv4} from 'uuid';
-import { contacts } from './placeholder-data';
 
 export const formatCurrency = (amount: number) => {
   return (amount / 100).toLocaleString('en-US', {
@@ -85,6 +84,7 @@ const getRandomDate = (start: string, end: string): string => {
 }
 
 type CreateRandomPaysArgs = {
+  contacts: Contact[],
   totalPays?: number,
   sender?: Contact,
   recipient?: Contact,
@@ -94,6 +94,7 @@ type CreateRandomPaysArgs = {
 };
 
 export const createRandomPays = ({
+  contacts,
   totalPays=5,
   sender,
   recipient,
@@ -112,4 +113,25 @@ export const createRandomPays = ({
     date: getRandomDate(start, end),
     status: 'paid',
   }))
+}
+
+// Assumes pays are from a single year, as stated in requirements. 
+// Will break when pays span over May 2024 and May 2025.
+export const groupPaysAmountsByMonth = (pays: Pay[]): Activity[] => {
+  const reducedPays =  pays.reduce((acc, pay) => {
+    const payDate = new Date(pay.date);
+    const monthAbbr = payDate.toLocaleString('en-US', { month: 'short' });
+    if (!acc[monthAbbr]) {
+      acc[monthAbbr] = 0
+    }
+    acc[monthAbbr] += pay.amount;
+    return acc;
+  }, {});
+  
+  const result = Object.entries(reducedPays).map(([month, activity]) => ({
+    month,
+    activity,
+  } as Activity));
+
+  return result
 }

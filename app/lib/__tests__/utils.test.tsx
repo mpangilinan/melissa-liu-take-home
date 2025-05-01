@@ -1,33 +1,18 @@
 import '@testing-library/jest-dom';
 import {describe, expect, test} from '@jest/globals';
-import { createRandomPays} from '../utils';
-
-jest.mock('../placeholder-data', () => ({
-    contacts: [
-        {
-            id: '123', 
-            name: 'Test Contact 1', 
-            email: 'testcontact@email.com', 
-            image_url: '../../../public/contacts/amy-burns.png'
-        },
-        {
-            id: '456', 
-            name: 'Test Contact 2', 
-            email: 'testcontact@email.com', 
-            image_url: '../../../public/contacts/amy-burns.png'
-        },
-        {
-            id: '789', 
-            name: 'Test Contact 3', 
-            email: 'testcontact@email.com', 
-            image_url: '../../../public/contacts/amy-burns.png'
-        }
-    ],
-}));
+import { createRandomPays, groupPaysAmountsByMonth} from '../utils';
+import { createContactFixture, createPayFixture } from '../testutils';
 
 describe('utils tests',  () => {
+    const contactMelissa = createContactFixture({name: 'melissa'})
+    const contacts = [
+        contactMelissa,
+        createContactFixture({id: '456', name: 'Test Contact 2'}), 
+        createContactFixture({id: '789', name: 'Test Contact 3'})
+    ]
+
     test('createRandomPays returns default pays',  () => {
-        const res =  createRandomPays({});
+        const res =  createRandomPays({contacts});
         
         expect(res.length).toBe(5);
         expect(res.every(pay => pay.recipient !== pay.sender)).toBe(true);
@@ -45,21 +30,16 @@ describe('utils tests',  () => {
     });
 
     test('createRandomPays returns specific pays',  () => {
-        const Contact1 = {
-            id: '123', 
-            name: 'Test Contact', 
-            email: 'testcontact@email.com', 
-            image_url: '../../../public/contacts/amy-burns.png'
-        };
         const req = {
+            contacts,
             totalPays: 2,
-            sender: Contact1, 
+            sender: contactMelissa, 
             maxPayAmount: 1500,
             start: '2025-04-01'}
-        const res =  createRandomPays(req);
+        const res = createRandomPays(req);
         
         expect(res.length).toBe(2);
-        expect(res.every(pay => pay.recipient !== Contact1)).toBe(true);
+        expect(res.every(pay => pay.recipient !== contactMelissa)).toBe(true);
         expect(res.every(pay => pay.amount < 1500)).toBe(true);
         expect(res.every(pay => {
             const startDate = new Date(req.start);
@@ -67,4 +47,21 @@ describe('utils tests',  () => {
             return startDate < payDate;
         })).toBe(true)
     });
+
+    test('groupPaysAmountsByMonth', () => {
+        const janPay = createPayFixture({date: '2025-01-10', amount: 1100})
+        const janPay2 = createPayFixture({date: '2025-01-13', amount: 1100})
+        const febPay = createPayFixture({date: '2025-02-05', amount: 3300})
+        const aprPay = createPayFixture({date: '2025-04-14', amount: 1200})
+        const aprPay2 = createPayFixture({date: '2025-04-15', amount: 1100})
+        const pays = [janPay, janPay2, febPay, aprPay, aprPay2];
+
+        const res = groupPaysAmountsByMonth(pays)
+
+        expect(res).toEqual([
+            {month: 'Jan', activity: 2200},
+            {month: 'Feb', activity: 3300},
+            {month: 'Apr', activity: 2300},
+        ])
+    })
 });

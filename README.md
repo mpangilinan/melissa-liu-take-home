@@ -85,3 +85,4 @@ _Replace this: I decided to build X for Y reasons..._
 ## Assumptions
 
 - Users cannot pay themselves, so a `Pay` object will always have a different sender from recipient
+- I assume I couldn't change types other than `Pay`. If I could, I would update `Activity.month` to be strongly typed as `month: 'Jan' | 'Feb' | ... | 'Dec'` OR change the string in `placeholder-data.ts` to be "Jan 2025", "Feb 2025", etc.
