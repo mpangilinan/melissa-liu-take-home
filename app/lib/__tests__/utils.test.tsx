@@ -14,7 +14,7 @@ describe('utils tests',  () => {
     test('createRandomPays returns default pays',  () => {
         const res =  createRandomPays({contacts});
         
-        expect(res.length).toBe(5);
+        expect(res.length).toBe(10);
         expect(res.every(pay => pay.recipient !== pay.sender)).toBe(true);
         expect(res.every(pay => pay.amount < 250000)).toBe(true);
         expect(res.every(pay => {
@@ -59,9 +59,18 @@ describe('utils tests',  () => {
         const res = groupPaysAmountsByMonth(pays)
 
         expect(res).toEqual([
-            {month: 'Jan', activity: 2200},
-            {month: 'Feb', activity: 3300},
-            {month: 'Apr', activity: 2300},
+            {month: 'Jun', activity: 0},
+            {month: 'Jul', activity: 0},
+            {month: 'Aug', activity: 0},
+            {month: 'Sep', activity: 0},
+            {month: 'Oct', activity: 0},
+            {month: 'Nov', activity: 0},
+            {month: 'Dec', activity: 0},
+            {month: 'Jan', activity: 22},
+            {month: 'Feb', activity: 33},
+            {month: 'Mar', activity: 0},
+            {month: 'Apr', activity: 23},
+            {month: 'May', activity: 0},
         ])
     })
 });

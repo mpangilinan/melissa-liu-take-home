@@ -46,10 +46,10 @@ export async function fetchCardData() {
     ]);
 
     // TODO: calculate these values
-    const numberOfPays = 0;
-    const numberOfContacts = 0;
-    const totalPaidPays = 0;
-    const totalPendingPays = 0;
+    const numberOfPays = pays.length;
+    const numberOfContacts = contacts.length;
+    const totalPaidPays = pays.filter(pay => pay.status === 'paid').length;
+    const totalPendingPays = pays.filter(pay => pay.status === 'pending').length;
 
     return {
       numberOfContacts,

@@ -120,20 +120,31 @@ export const createRandomPays = ({
 // Assumes pays are from a single year, as stated in requirements. 
 // Will break when pays span over May 2024 and May 2025.
 export const groupPaysAmountsByMonth = (pays: Pay[]): Activity[] => {
-  const reducedPays =  pays.reduce((acc, pay) => {
+  const activitiesMap = new Map<string, number>([
+    ['Jun', 0],
+    ['Jul', 0],
+    ['Aug', 0],
+    ['Sep', 0],
+    ['Oct', 0],
+    ['Nov', 0],
+    ['Dec', 0],
+    ['Jan', 0],
+    ['Feb', 0],
+    ['Mar', 0],
+    ['Apr', 0],
+    ['May', 0],
+  ]);
+
+  pays.forEach((pay) => {
     const payDate = new Date(pay.date);
     const monthAbbr = payDate.toLocaleString('en-US', { month: 'short' });
-    if (!acc[monthAbbr]) {
-      acc[monthAbbr] = 0
-    }
-    acc[monthAbbr] += pay.amount;
-    return acc;
-  }, {});
-  
-  const result = Object.entries(reducedPays).map(([month, activity]) => ({
-    month,
-    activity,
-  } as Activity));
+    activitiesMap.set(monthAbbr, activitiesMap.get(monthAbbr) + pay.amount)
+  })
 
-  return result
+  const activities = Array.from(activitiesMap, ([month, activity]) => ({
+    month,
+    activity: Number(activity)/100,
+  } as Activity));
+  
+  return activities
 }

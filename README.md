@@ -84,5 +84,6 @@ _Replace this: I decided to build X for Y reasons..._
 
 ## Assumptions
 
+- `Amount` is currency in cents because `formatCurrency()` divides the amount by 100.
 - Users cannot pay themselves, so a `Pay` object will always have a different sender from recipient
 - "total pays" for a contact is the total number of pays were a contact is a sender OR receiver of a pay.
