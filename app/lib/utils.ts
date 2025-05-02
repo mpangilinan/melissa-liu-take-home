@@ -91,6 +91,7 @@ type CreateRandomPaysArgs = {
   maxPayAmount?: number,
   start?: string,
   end?: string,
+  status?: 'paid' | 'pending',
 };
 
 export const createRandomPays = ({
@@ -100,7 +101,8 @@ export const createRandomPays = ({
   recipient,
   maxPayAmount=250000,
   start='2024-06-01',
-  end='2025-05-31'
+  end='2025-05-31',
+  status
 }: CreateRandomPaysArgs): Pay[] => {
 
   const paySender = sender || getRandomUserWithExclusion(contacts);
@@ -111,7 +113,7 @@ export const createRandomPays = ({
     recipient: recipient || getRandomUserWithExclusion(contacts, paySender),
     amount: Math.floor(Math.random() * maxPayAmount),
     date: getRandomDate(start, end),
-    status: 'paid',
+    status: status || Math.random() < 0.5 ? 'paid' : 'pending',
   }))
 }
 

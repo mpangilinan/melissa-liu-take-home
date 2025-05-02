@@ -2,6 +2,7 @@ import { useReducer } from "react";
 import {createRandomPays, formatCurrency, groupPaysAmountsByMonth} from './utils';
 // import {contacts, pays, activity} from "@/app/lib/placeholder-data";
 import {contacts} from "./placeholder-data";
+import { Contact } from "./definitions";
 
 const pays = createRandomPays({contacts});
 const activity = groupPaysAmountsByMonth(pays);
@@ -112,10 +113,35 @@ export async function fetchContacts() {
   }
 }
 
+type ExtendedContact = {
+  total_pays: number,
+  total_pending: number, 
+  total_paid: number,
+} & Contact;
+
+export function extendContactData(pays: Pay[], contacts: Contact[]): ExtendedContact[] {
+  const newContacts : ExtendedContact[] = [];
+
+  contacts.forEach(contact => {
+    const contactPays = pays.filter((pay)=> contact === pay.sender || contact === pay.recipient)
+    let contactMap = {total_pays: 0, total_pending: 0, total_paid: 0}
+    contactPays.forEach(pay => {
+      if (pay.status === 'paid') { contactMap.total_paid += 1 }
+      else if (pay.status === 'pending') { contactMap.total_pending += 1}
+      contactMap.total_pays += 1
+    })
+    newContacts.push({...contact, ...contactMap});
+  })
+  return newContacts
+}
+
 export async function fetchFilteredContacts(query: string) {
   try {
     // TODO: return contacts with total_pays, total_pending, total_paid
-    return query === '' ? contacts : [];
+    const queriedContacts = contacts.filter((contact) => {
+      return contact.name.includes((query.toLowerCase())) || contact.email.includes((query.toLocaleLowerCase()))
+    })
+    return extendContactData(pays, queriedContacts);
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch contact table.');
