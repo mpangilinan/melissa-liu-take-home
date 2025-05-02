@@ -26,11 +26,11 @@ export default async function PaysTable({
                   <div>
                     <div className="mb-2 flex items-center">
                       <Image
-                        src={pay.image_url}
+                        src={pay.sender.image_url}
                         className="mr-2 rounded-full"
                         width={28}
                         height={28}
-                        alt={`${pay.name}'s profile picture`}
+                        alt={`${pay.sender.name}'s profile picture`}
                       />
                       <p>{pay.name}</p>
                     </div>
@@ -69,17 +69,17 @@ export default async function PaysTable({
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex items-center gap-3">
                       <Image
-                        src={pay.image_url}
+                        src={pay.recipient.image_url}
                         className="rounded-full"
                         width={28}
                         height={28}
-                        alt={`${pay.name}'s profile picture`}
+                        alt={`${pay.recipient.name}'s profile picture`}
                       />
-                      <p>{pay.name}</p>
+                      <p>{pay.recipient.name}</p>
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {pay.email}
+                    {pay.recipient.email}
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">

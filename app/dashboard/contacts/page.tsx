@@ -3,11 +3,11 @@ import { PaysTableSkeleton } from '@/app/ui/skeletons';
 import { Suspense } from 'react';
 
 export default async function Page(
-    { searchParams }: { searchParams?: {
+    { searchParams }: { searchParams?: Promise<{
         query?: string;
-    }
+    }>
 }) {
-    const query = searchParams?.query || '';
+    const query = (await searchParams)?.query || '';
 
     return (
         <div className="w-full">

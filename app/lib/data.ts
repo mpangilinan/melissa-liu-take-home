@@ -1,7 +1,10 @@
 import { useReducer } from "react";
-import {formatCurrency} from './utils';
+import {createRandomPays, formatCurrency, groupPaysAmountsByMonth} from './utils';
 // import {contacts, pays, activity} from "@/app/lib/placeholder-data";
-import {contacts, pays, activity} from "./placeholder-data";
+import {contacts} from "./placeholder-data";
+
+const pays = createRandomPays({contacts});
+const activity = groupPaysAmountsByMonth(pays);
 
 export async function fetchActivity() {
   try {
@@ -69,7 +72,7 @@ export async function fetchFilteredPays(
   try {
 
     // TODO: filter the related pay joined data for the query string passed
-    return [];
+    return query === '' ? pays : [];
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch pays.');
@@ -102,7 +105,7 @@ export async function fetchContacts() {
   try {
 
     // TODO: return contacts
-    return [];
+    return contacts;
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch all contacts.');
@@ -112,7 +115,7 @@ export async function fetchContacts() {
 export async function fetchFilteredContacts(query: string) {
   try {
     // TODO: return contacts with total_pays, total_pending, total_paid
-    return [];
+    return query === '' ? contacts : [];
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch contact table.');
