@@ -96,7 +96,7 @@ type CreateRandomPaysArgs = {
 
 export const createRandomPays = ({
   contacts,
-  totalPays=5,
+  totalPays=10,
   sender,
   recipient,
   maxPayAmount=250000,

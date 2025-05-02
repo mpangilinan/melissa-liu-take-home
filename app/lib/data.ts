@@ -73,7 +73,20 @@ export async function fetchFilteredPays(
   try {
 
     // TODO: filter the related pay joined data for the query string passed
-    return query === '' ? pays : [];
+    const filteredPays = pays.filter((pay) => {
+      const queryAmount = parseInt(query, 10);
+      const filteredByNumbers = pay.amount === queryAmount
+      const filteredByString = pay.sender.name.includes((query.toLowerCase())) ||
+        pay.sender.email.includes((query.toLowerCase())) ||
+        pay.recipient.name.includes((query.toLowerCase())) ||
+        pay.recipient.email.includes((query.toLowerCase())) ||
+        pay.memo?.includes((query.toLowerCase()))
+      const filteredByStatus = query === 'paid' && pay.status === 'paid ' || query === 'pending' && pay.status === 'pending'
+
+      return filteredByNumbers || filteredByString || filteredByStatus
+    })
+
+    return filteredPays.slice(offset, offset + ITEMS_PER_PAGE);
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch pays.');
