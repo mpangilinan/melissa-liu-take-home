@@ -64,7 +64,7 @@ export async function fetchCardData() {
   }
 }
 
-export function filterByAmount(amount: number, query?: string, ) {
+export function filterByAmount(amount: number, query?: string) {
   const match = query?.match(/[-+]?\d{1,3}(?:,\d{3})*(?:\.\d+)?|\d+(\.\d+)?/);
   const value = match ? parseFloat(match[0].replace(/,/g, '')) : NaN;
   return amount / 100 === value;
@@ -87,8 +87,8 @@ export async function fetchFilteredPays(
         pay.recipient.name.includes((query.toLowerCase())) ||
         pay.recipient.email.includes((query.toLowerCase())) ||
         pay.memo?.includes((query.toLowerCase()));
-      const filteredByStatus = query === 'paid' && pay.status === 'paid ' || query === 'pending' && pay.status === 'pending';
-
+      const filteredByStatus = query === pay.status;
+      
       return filteredByNumbers || filteredByString || filteredByStatus;
     });
 

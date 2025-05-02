@@ -50,6 +50,9 @@ export default async function PaysTable({
           <table className="hidden min-w-full text-gray-900 md:table">
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Date
+                </th>
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
                   From
                 </th>
@@ -60,7 +63,7 @@ export default async function PaysTable({
                   Amount
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Date
+                  Status
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
@@ -73,6 +76,11 @@ export default async function PaysTable({
                   key={pay.id}
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
+                  <td className="whitespace-nowrap px-3 py-3">
+                    <div className="flex items-center gap-3">
+                        <p>{pay.date}</p>
+                    </div>
+                  </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex items-center gap-3">
                       <Image
@@ -110,7 +118,7 @@ export default async function PaysTable({
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     <div className="flex items-center gap-3">
-                        <p>{pay.date}</p>
+                        <p>{pay.status}</p>
                     </div>
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">

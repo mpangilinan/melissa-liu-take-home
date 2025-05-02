@@ -113,7 +113,7 @@ export const createRandomPays = ({
       recipient: recipient || getRandomUserWithExclusion(contacts, sender),
       amount: Math.floor(Math.random() * maxPayAmount),
       date: getRandomDate(start, end),
-      status: status || Math.random() < 0.5 ? 'paid' : 'pending',
+      status: status || (Math.random() < 0.5 ? 'paid' : 'pending'),
       };
 
     if (p.sender === p.recipient) {
