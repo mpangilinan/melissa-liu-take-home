@@ -1,6 +1,6 @@
-'use server'
+'use server';
 
-import { z } from 'zod'
+import { z } from 'zod';
 
 const FormSchema = z.object({
     id: z.string(),
@@ -18,5 +18,5 @@ export async function createPay(formData: FormData) {
         status: formData.get('status'),
     });
     const amountInCents = amount * 100;
-    const date = new Date().toISOString().split('T')[0]
+    const date = new Date().toISOString().split('T')[0];
 }

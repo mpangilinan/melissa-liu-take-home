@@ -24,20 +24,20 @@ describe('data tests',  () => {
             };
 
             (fetchPayById as jest.Mock).mockResolvedValue(fixture);
-            const res = await fetchPayById("123");
-            expect(res).toEqual(fixture)
+            const res = await fetchPayById('123');
+            expect(res).toEqual(fixture);
         });
 
         test('fetchPayById returns no pay', async () => {
             (fetchPayById as jest.Mock).mockResolvedValue(undefined);
-            const res = await fetchPayById("789");
-            expect(res).toBeUndefined()
+            const res = await fetchPayById('789');
+            expect(res).toBeUndefined();
         });
     });
 
     describe('extendContactData', () => {
-        const contact1 = createContactFixture({name: 'melissa'})
-        const contact2 = createContactFixture({name: 'lee'})
+        const contact1 = createContactFixture({name: 'melissa'});
+        const contact2 = createContactFixture({name: 'lee'});
         const pays = [
             createPayFixture({
                 status: 'paid', 
@@ -49,8 +49,8 @@ describe('data tests',  () => {
                 sender: contact2, 
                 recipient: contact1
             })
-        ]
-        const contacts = [contact1, contact2]
+        ];
+        const contacts = [contact1, contact2];
         
         test('extendContactData returns pending and paid counts', async () => {
             const expected = [
@@ -66,9 +66,9 @@ describe('data tests',  () => {
                     total_pending: 1, 
                     total_paid: 1,
                 }
-            ]
+            ];
             const res = extendContactData(pays, contacts);
-            expect(res).toEqual(expected)
+            expect(res).toEqual(expected);
         });
 
     });
@@ -80,6 +80,6 @@ describe('data tests',  () => {
 
         test('filterByAmount returns false', () => {
             expect(filterByAmount(598301, '$5983')).toBe(false);
-        })
-    })
+        });
+    });
 });

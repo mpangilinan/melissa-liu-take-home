@@ -1,8 +1,8 @@
-import { useReducer } from "react";
+import { useReducer } from 'react';
 import {createRandomPays, formatCurrency, groupPaysAmountsByMonth} from './utils';
 // import {contacts, pays, activity} from "@/app/lib/placeholder-data";
-import {contacts} from "./placeholder-data";
-import { Contact } from "./definitions";
+import {contacts} from './placeholder-data';
+import { Contact } from './definitions';
 
 const pays = createRandomPays({contacts});
 const activity = groupPaysAmountsByMonth(pays);
@@ -13,7 +13,7 @@ export async function fetchActivity() {
     // Don't do this in production :)
 
     await new Promise((resolve) => setTimeout(resolve, getRandomMillis(3)));
-    console.log('pays ', pays)
+    console.log('pays ', pays);
 
     return activity;
   } catch (error) {
@@ -81,16 +81,16 @@ export async function fetchFilteredPays(
 
     // TODO: filter the related pay joined data for the query string passed
     const filteredPays = pays.filter((pay) => {
-      const filteredByNumbers = filterByAmount(pay.amount, query)
+      const filteredByNumbers = filterByAmount(pay.amount, query);
       const filteredByString = pay.sender.name.includes((query.toLowerCase())) ||
         pay.sender.email.includes((query.toLowerCase())) ||
         pay.recipient.name.includes((query.toLowerCase())) ||
         pay.recipient.email.includes((query.toLowerCase())) ||
-        pay.memo?.includes((query.toLowerCase()))
-      const filteredByStatus = query === 'paid' && pay.status === 'paid ' || query === 'pending' && pay.status === 'pending'
+        pay.memo?.includes((query.toLowerCase()));
+      const filteredByStatus = query === 'paid' && pay.status === 'paid ' || query === 'pending' && pay.status === 'pending';
 
-      return filteredByNumbers || filteredByString || filteredByStatus
-    })
+      return filteredByNumbers || filteredByString || filteredByStatus;
+    });
 
     // sort by descending order
     filteredPays.sort((a, b) => Number(new Date(b.date)) - Number(new Date(a.date)));
@@ -116,7 +116,7 @@ export async function fetchPayById(id: string) {
   try {
 
     // TODO: return this pay
-    return pays.find((pay) =>  pay.id === id)
+    return pays.find((pay) =>  pay.id === id);
 
   } catch (error) {
     console.error('Database Error:', error);
@@ -145,24 +145,24 @@ export function extendContactData(pays: Pay[], contacts: Contact[]): ExtendedCon
   const newContacts : ExtendedContact[] = [];
 
   contacts.forEach(contact => {
-    const contactPays = pays.filter((pay)=> contact === pay.sender || contact === pay.recipient)
-    let contactMap = {total_pays: 0, total_pending: 0, total_paid: 0}
+    const contactPays = pays.filter((pay)=> contact === pay.sender || contact === pay.recipient);
+    let contactMap = {total_pays: 0, total_pending: 0, total_paid: 0};
     contactPays.forEach(pay => {
-      if (pay.status === 'paid') { contactMap.total_paid += 1 }
-      else if (pay.status === 'pending') { contactMap.total_pending += 1}
-      contactMap.total_pays += 1
-    })
+      if (pay.status === 'paid') { contactMap.total_paid += 1; }
+      else if (pay.status === 'pending') { contactMap.total_pending += 1;}
+      contactMap.total_pays += 1;
+    });
     newContacts.push({...contact, ...contactMap});
-  })
-  return newContacts
+  });
+  return newContacts;
 }
 
 export async function fetchFilteredContacts(query: string) {
   try {
     // TODO: return contacts with total_pays, total_pending, total_paid
     const queriedContacts = contacts.filter((contact) => {
-      return contact.name.includes((query.toLowerCase())) || contact.email.includes((query.toLocaleLowerCase()))
-    })
+      return contact.name.includes((query.toLowerCase())) || contact.email.includes((query.toLocaleLowerCase()));
+    });
     return extendContactData(pays, queriedContacts);
   } catch (err) {
     console.error('Database Error:', err);

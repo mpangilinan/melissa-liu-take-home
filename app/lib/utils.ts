@@ -70,18 +70,18 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
 };
 
 const getRandomUserWithExclusion = (contacts: Contact[], excludeContact?: Contact): Contact => {
-    const possibleContacts = contacts.filter((c) => c != excludeContact)
+    const possibleContacts = contacts.filter((c) => c != excludeContact);
     const index = Math.floor(Math.random() * possibleContacts.length);
     return possibleContacts[index];
   };
 
 const getRandomDate = (start: string, end: string): string => {
-    const startDate = new Date(start)
-    const endDate = new Date(end)
+    const startDate = new Date(start);
+    const endDate = new Date(end);
     const randomTime = startDate.getTime() + Math.random() * (endDate.getTime() - startDate.getTime());
     const date = new Date(randomTime);
     return date.toISOString().split('T')[0]; // 'yyyy-mm-dd'
-}
+};
 
 type CreateRandomPaysArgs = {
   contacts: Contact[],
@@ -109,20 +109,20 @@ export const createRandomPays = ({
 
     const p = {
       id: uuidv4(),
-      sender: sender ?? getRandomUserWithExclusion(contacts),
-      recipient: recipient ?? getRandomUserWithExclusion(contacts, sender),
+      sender: sender || getRandomUserWithExclusion(contacts),
+      recipient: recipient || getRandomUserWithExclusion(contacts, sender),
       amount: Math.floor(Math.random() * maxPayAmount),
       date: getRandomDate(start, end),
-      status: status ?? Math.random() < 0.5 ? 'paid' : 'pending',
+      status: status || Math.random() < 0.5 ? 'paid' : 'pending',
       };
 
     if (p.sender === p.recipient) {
       p.recipient = getRandomUserWithExclusion(contacts, p.sender);
     };
 
-    return p
-  })
-}
+    return p;
+  });
+};
 
 // Assumes pays are from a single year, as stated in requirements. 
 // Will break when pays span over May 2024 and May 2025.
@@ -145,13 +145,13 @@ export const groupPaysAmountsByMonth = (pays: Pay[]): Activity[] => {
   pays.forEach((pay) => {
     const payDate = new Date(pay.date);
     const monthAbbr = payDate.toLocaleString('en-US', { month: 'short' });
-    activitiesMap.set(monthAbbr, activitiesMap.get(monthAbbr) + pay.amount)
-  })
+    activitiesMap.set(monthAbbr, activitiesMap.get(monthAbbr) + pay.amount);
+  });
 
   const activities = Array.from(activitiesMap, ([month, activity]) => ({
     month,
     activity: Number(activity)/100,
   } as Activity));
   
-  return activities
-}
+  return activities;
+};

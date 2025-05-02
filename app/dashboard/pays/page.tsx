@@ -1,5 +1,5 @@
 import Pagination from '@/app/ui/pays/pagination';
-import { fetchPaysPages } from "@/app/lib/data";
+import { fetchPaysPages } from '@/app/lib/data';
 import Search from '@/app/ui/search';
 import Table from '@/app/ui/pays/table';
 import { CreatePay } from '@/app/ui/pays/buttons';

@@ -1,4 +1,4 @@
-import { Contact, Pay } from "./definitions"
+import { Contact, Pay } from './definitions';
 
 type ContactProps = {
     id?: string;
@@ -13,8 +13,8 @@ export const createContactFixture = ({id, name, email, image_url}: ContactProps)
         name: name || 'Test Contact', 
         email: email || 'testcontact@email.com', 
         image_url: image_url || '../../../public/contacts/amy-burns.png'
-    }
-}
+    };
+};
 
 type PayProps = {
     id?: string; 
@@ -35,5 +35,5 @@ export const createPayFixture = ({id, sender, recipient, amount, date, status, m
         date: date || '2025-04-30',
         status: status || 'paid',
         memo: memo || 'test fixture'
-    }
-}
+    };
+};

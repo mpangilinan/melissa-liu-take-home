@@ -2,8 +2,8 @@ import CardWrapper, { Card } from '@/app/ui/dashboard/cards';
 import ActivityChart from '@/app/ui/dashboard/activity-chart';
 import LatestPays from '@/app/ui/dashboard/latest-pays';
 import { lusitana } from '@/app/ui/fonts';
-import { Suspense } from "react";
-import {CardsSkeleton, LatestPaysSkeleton, ActivityChartSkeleton} from "@/app/ui/skeletons";
+import { Suspense } from 'react';
+import {CardsSkeleton, LatestPaysSkeleton, ActivityChartSkeleton} from '@/app/ui/skeletons';
 
 export default async function Page() {
     return (
