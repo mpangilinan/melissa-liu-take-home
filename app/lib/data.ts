@@ -13,6 +13,7 @@ export async function fetchActivity() {
     // Don't do this in production :)
 
     await new Promise((resolve) => setTimeout(resolve, getRandomMillis(3)));
+    console.log('pays ', pays)
 
     return activity;
   } catch (error) {
@@ -63,6 +64,12 @@ export async function fetchCardData() {
   }
 }
 
+export function filterByAmount(amount: number, query?: string, ) {
+  const match = query?.match(/[-+]?\d{1,3}(?:,\d{3})*(?:\.\d+)?|\d+(\.\d+)?/);
+  const value = match ? parseFloat(match[0].replace(/,/g, '')) : NaN;
+  return amount / 100 === value;
+}
+
 const ITEMS_PER_PAGE = 6;
 export async function fetchFilteredPays(
   query: string,
@@ -74,8 +81,7 @@ export async function fetchFilteredPays(
 
     // TODO: filter the related pay joined data for the query string passed
     const filteredPays = pays.filter((pay) => {
-      const queryAmount = parseInt(query, 10);
-      const filteredByNumbers = pay.amount === queryAmount
+      const filteredByNumbers = filterByAmount(pay.amount, query)
       const filteredByString = pay.sender.name.includes((query.toLowerCase())) ||
         pay.sender.email.includes((query.toLowerCase())) ||
         pay.recipient.name.includes((query.toLowerCase())) ||
@@ -85,6 +91,9 @@ export async function fetchFilteredPays(
 
       return filteredByNumbers || filteredByString || filteredByStatus
     })
+
+    // sort by descending order
+    filteredPays.sort((a, b) => Number(new Date(b.date)) - Number(new Date(a.date)));
 
     return filteredPays.slice(offset, offset + ITEMS_PER_PAGE);
   } catch (error) {

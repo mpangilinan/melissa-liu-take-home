@@ -105,16 +105,23 @@ export const createRandomPays = ({
   status
 }: CreateRandomPaysArgs): Pay[] => {
 
-  const paySender = sender || getRandomUserWithExclusion(contacts);
+  return Array.from({ length: totalPays }, (_, i) => {
 
-  return Array.from({ length: totalPays }, (_, i) => ({
-    id: uuidv4(),
-    sender: paySender,
-    recipient: recipient || getRandomUserWithExclusion(contacts, paySender),
-    amount: Math.floor(Math.random() * maxPayAmount),
-    date: getRandomDate(start, end),
-    status: status || Math.random() < 0.5 ? 'paid' : 'pending',
-  }))
+    const p = {
+      id: uuidv4(),
+      sender: sender ?? getRandomUserWithExclusion(contacts),
+      recipient: recipient ?? getRandomUserWithExclusion(contacts, sender),
+      amount: Math.floor(Math.random() * maxPayAmount),
+      date: getRandomDate(start, end),
+      status: status ?? Math.random() < 0.5 ? 'paid' : 'pending',
+      };
+
+    if (p.sender === p.recipient) {
+      p.recipient = getRandomUserWithExclusion(contacts, p.sender);
+    };
+
+    return p
+  })
 }
 
 // Assumes pays are from a single year, as stated in requirements. 

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { UpdatePay, DeletePay } from '@/app/ui/pays/buttons';
 import { fetchFilteredPays } from '@/app/lib/data';
+import { formatCurrency } from '@/app/lib/utils';
 
 //
 export default async function PaysTable({
@@ -50,10 +51,16 @@ export default async function PaysTable({
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                  Contact
+                  From
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Email
+                  To
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Amount
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Date
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
@@ -69,17 +76,42 @@ export default async function PaysTable({
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex items-center gap-3">
                       <Image
+                        src={pay.sender.image_url}
+                        className="rounded-full"
+                        width={28}
+                        height={28}
+                        alt={`${pay.sender.name}'s profile picture`}
+                      />
+                      <div>
+                        <p>{pay.sender.name}</p>
+                        <p>{pay.sender.email}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3">
+                    <div className="flex items-center gap-3">
+                      <Image
                         src={pay.recipient.image_url}
                         className="rounded-full"
                         width={28}
                         height={28}
                         alt={`${pay.recipient.name}'s profile picture`}
                       />
-                      <p>{pay.recipient.name}</p>
+                      <div>
+                        <p>{pay.recipient.name}</p>
+                        <p>{pay.recipient.email}</p>
+                      </div>
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {pay.recipient.email}
+                    <div className="flex items-center gap-3">
+                        <p>{formatCurrency(pay.amount)}</p>
+                    </div>
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3">
+                    <div className="flex items-center gap-3">
+                        <p>{pay.date}</p>
+                    </div>
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">

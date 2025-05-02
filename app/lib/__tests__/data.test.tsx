@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import {describe, expect, test} from '@jest/globals';
-import {extendContactData, fetchPayById } from '../data';
+import {extendContactData, fetchPayById, filterByAmount } from '../data';
 import { createContactFixture, createPayFixture } from '../testutils';
 
 jest.mock('../data', () => {
@@ -72,4 +72,14 @@ describe('data tests',  () => {
         });
 
     });
+
+    describe('filterByAmount', () => {
+        test('filterByAmount returns true', () => {
+            expect(filterByAmount(598301, '$5,983.01')).toBe(true);
+        });
+
+        test('filterByAmount returns false', () => {
+            expect(filterByAmount(598301, '$5983')).toBe(false);
+        })
+    })
 });
