@@ -3,7 +3,6 @@ import { UpdatePay, DeletePay } from '@/app/ui/pays/buttons';
 import { fetchFilteredPays } from '@/app/lib/data';
 import { formatCurrency } from '@/app/lib/utils';
 
-//
 export default async function PaysTable({
   query,
   currentPage,
@@ -63,6 +62,9 @@ export default async function PaysTable({
                   Amount
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
+                  Memo
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
                   Status
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
@@ -114,6 +116,11 @@ export default async function PaysTable({
                   <td className="whitespace-nowrap px-3 py-3">
                     <div className="flex items-center gap-3">
                         <p>{formatCurrency(pay.amount)}</p>
+                    </div>
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3">
+                    <div className="flex items-center gap-3">
+                        <p>{pay.memo}</p>
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">

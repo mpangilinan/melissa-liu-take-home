@@ -5,6 +5,7 @@ const user = {
   name: 'User',
   email: 'user@nextmail.com',
   password: '123456',
+  image_url: '/contacts/user.png',
 };
 
 const contacts = [
@@ -68,4 +69,4 @@ const contacts = [
 // ];
 
 
-export { contacts };
+export { contacts, user };

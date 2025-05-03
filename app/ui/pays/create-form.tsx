@@ -2,15 +2,22 @@ import { ContactField } from '@/app/lib/definitions';
 import Link from 'next/link';
 import {
   ArrowUpTrayIcon,
-    ArrowDownTrayIcon,
+  ArrowDownTrayIcon,
   CurrencyDollarIcon,
   UserCircleIcon,
+  PencilSquareIcon,
+  CalendarDaysIcon,
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
 import { createPay } from '@/app/lib/actions';
 
 // TODO: update form per your `pay` model
 export default function Form({ contacts }: { contacts: ContactField[] }) {
+  const today = new Date();
+  const todaysDate = today.toISOString().split('T')[0];
+  today.setDate(today.getDate() + 30);
+  const date30DaysFromNow = today.toISOString().split('T')[0];
+  
   return (
     <form action={createPay}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
@@ -25,12 +32,13 @@ export default function Form({ contacts }: { contacts: ContactField[] }) {
               name="contactId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               defaultValue=""
+              required
             >
               <option value="" disabled>
                 Select a contact
               </option>
               {contacts.map((contact) => (
-                <option key={contact.id} value={contact.id}>
+                <option key={contact.id} value={contact.id} >
                   {contact.name}
                 </option>
               ))}
@@ -52,9 +60,49 @@ export default function Form({ contacts }: { contacts: ContactField[] }) {
                 type="number"
                 step="0.01"
                 placeholder="Enter USD amount"
+                required
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
               <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+            </div>
+          </div>
+        </div>
+
+        {/* Memo */}
+        <div className="mb-4">
+          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
+            Memo (max 64 characters)
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="memo"
+                name="memo"
+                type="text"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              />
+              <PencilSquareIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
+            </div>
+          </div>
+        </div>
+
+        {/* Date */}
+        <div className="mb-4">
+          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
+            Date
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                type="date"
+                id="date"
+                name="date"
+                defaultValue={todaysDate}
+                min={todaysDate}
+                max={date30DaysFromNow}
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              />
+              <CalendarDaysIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
             </div>
           </div>
         </div>
@@ -68,10 +116,11 @@ export default function Form({ contacts }: { contacts: ContactField[] }) {
             <div className="flex gap-4">
               <div className="flex items-center">
                 <input
-                  id="pending"
-                  name="status"
+                  id="request"
+                  name="payType"
                   type="radio"
-                  value="pending"
+                  value="request"
+                  required
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
@@ -84,7 +133,7 @@ export default function Form({ contacts }: { contacts: ContactField[] }) {
               <div className="flex items-center">
                 <input
                   id="pay"
-                  name="status"
+                  name="payType"
                   type="radio"
                   value="pay"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
@@ -107,7 +156,7 @@ export default function Form({ contacts }: { contacts: ContactField[] }) {
         >
           Cancel
         </Link>
-        <Button type="submit">Create Pay</Button>
+        <Button type="submit" >Create Pay</Button>
       </div>
     </form>
   );

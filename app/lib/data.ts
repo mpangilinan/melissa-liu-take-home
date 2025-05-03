@@ -4,8 +4,7 @@ import {createRandomPays, formatCurrency, groupPaysAmountsByMonth} from './utils
 import {contacts} from './placeholder-data';
 import { Contact } from './definitions';
 
-const pays = createRandomPays({contacts});
-const activity = groupPaysAmountsByMonth(pays);
+export const pays = createRandomPays({contacts});
 
 export async function fetchActivity() {
   try {
@@ -15,7 +14,7 @@ export async function fetchActivity() {
     await new Promise((resolve) => setTimeout(resolve, getRandomMillis(3)));
     console.log('pays ', pays);
 
-    return activity;
+    return groupPaysAmountsByMonth(pays);
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch activity data.');
