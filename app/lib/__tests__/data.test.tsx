@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import {describe, expect, test} from '@jest/globals';
-import {extendContactData, fetchPayById, filterByAmount } from '../data';
+import {extendContactData, fetchPayById, filterByAmount, filterAllPays } from '../data';
 import { createContactFixture, createPayFixture } from '../testutils';
 
 jest.mock('../data', () => {
@@ -80,6 +80,26 @@ describe('data tests',  () => {
 
         test('filterByAmount returns false', () => {
             expect(filterByAmount(598301, '$5983')).toBe(false);
+        });
+    });
+
+    describe('filterAllPays', () => {
+        const contact = createContactFixture({name: 'fetch name'});
+        const pays = [
+            createPayFixture({memo: 'fetch query'}),
+            createPayFixture({sender: contact}),
+            createPayFixture({memo: 'different memo'}),
+        ];
+        test('filterAllPays returns pay that match criteria', () => {
+            expect(filterAllPays(pays, 'fetch')).toHaveLength(2);
+        });
+
+        test('filterAllPays returns 0 pays when query yields no results', () => {
+            expect(filterAllPays(pays, 'brand new query')).toEqual([]);
+        });
+
+        test('filterAllPays returns all pays when query is empty', () => {
+            expect(filterAllPays(pays, '')).toEqual(pays);
         });
     });
 });

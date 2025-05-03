@@ -105,7 +105,7 @@ export const createRandomPays = ({
   status
 }: CreateRandomPaysArgs): Pay[] => {
 
-  return Array.from({ length: totalPays }, (_, i) => {
+  const unsortedPays =  Array.from({ length: totalPays }, (_, i) => {
 
     const p = {
       id: uuidv4(),
@@ -122,6 +122,11 @@ export const createRandomPays = ({
 
     return p;
   });
+
+  // sort by descending order
+  unsortedPays.sort((a, b) => Number(new Date(b.date)) - Number(new Date(a.date)));
+  
+  return unsortedPays;
 };
 
 // Assumes pays are from a single year, as stated in requirements. 

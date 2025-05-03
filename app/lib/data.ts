@@ -1,8 +1,6 @@
-import { useReducer } from 'react';
 import {createRandomPays, formatCurrency, groupPaysAmountsByMonth} from './utils';
-// import {contacts, pays, activity} from "@/app/lib/placeholder-data";
 import {contacts} from './placeholder-data';
-import { Contact } from './definitions';
+import { Contact, LatestPay, Pay } from './definitions';
 
 export const pays = createRandomPays({contacts});
 
@@ -26,7 +24,17 @@ export async function fetchLatestPays() {
     await new Promise((resolve) => setTimeout(resolve, getRandomMillis(3)));
 
     // TODO: return latest pays data joined with contacts
-    return [];
+    const last5Pays = pays.slice(0,5);
+    const latestPaysList = last5Pays.map(({id, sender, amount,}) => {
+      return {
+        id,
+        name: sender.name,
+        image_url: sender.image_url,
+        email: sender.email,
+        amount: String(amount),
+      } as LatestPay;
+    });
+    return latestPaysList;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch the latest pays.');
@@ -69,6 +77,20 @@ export function filterByAmount(amount: number, query?: string) {
   return amount / 100 === value;
 }
 
+export function filterAllPays(pays: Pay[], query: string): Pay[] {
+  return pays.filter((pay) => {
+    const filteredByNumbers = filterByAmount(pay.amount, query);
+    const filteredByString = pay.sender.name.includes((query.toLowerCase())) ||
+      pay.sender.email.includes((query.toLowerCase())) ||
+      pay.recipient.name.includes((query.toLowerCase())) ||
+      pay.recipient.email.includes((query.toLowerCase())) ||
+      pay.memo?.includes((query.toLowerCase()));
+    const filteredByStatus = query === pay.status;
+    
+    return filteredByNumbers || filteredByString || filteredByStatus;
+  });
+}
+
 const ITEMS_PER_PAGE = 6;
 export async function fetchFilteredPays(
   query: string,
@@ -79,21 +101,7 @@ export async function fetchFilteredPays(
   try {
 
     // TODO: filter the related pay joined data for the query string passed
-    const filteredPays = pays.filter((pay) => {
-      const filteredByNumbers = filterByAmount(pay.amount, query);
-      const filteredByString = pay.sender.name.includes((query.toLowerCase())) ||
-        pay.sender.email.includes((query.toLowerCase())) ||
-        pay.recipient.name.includes((query.toLowerCase())) ||
-        pay.recipient.email.includes((query.toLowerCase())) ||
-        pay.memo?.includes((query.toLowerCase()));
-      const filteredByStatus = query === pay.status;
-      
-      return filteredByNumbers || filteredByString || filteredByStatus;
-    });
-
-    // sort by descending order
-    filteredPays.sort((a, b) => Number(new Date(b.date)) - Number(new Date(a.date)));
-
+    const filteredPays = filterAllPays(pays, query);
     return filteredPays.slice(offset, offset + ITEMS_PER_PAGE);
   } catch (error) {
     console.error('Database Error:', error);
@@ -104,7 +112,8 @@ export async function fetchFilteredPays(
 export async function fetchPaysPages(query: string) {
   try {
     // TODO: filter the related pay joined data for the query string passed to find this value
-    return 0;
+    const filteredPays = filterAllPays(pays, query).length;
+    return Math.ceil(filteredPays / ITEMS_PER_PAGE);
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch total number of pays.');
