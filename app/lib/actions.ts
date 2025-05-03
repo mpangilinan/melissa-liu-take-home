@@ -5,6 +5,7 @@ import { user } from './placeholder-data';
 import { Pay } from './definitions';
 import { v4 as uuidv4 } from 'uuid';
 import { fetchContacts, pays } from './data';
+import { redirect } from 'next/navigation';
 
 const FormSchema = z.object({
     id: z.string(),
@@ -42,7 +43,7 @@ export async function createPay(formData: FormData) {
     status === 'paid' ? p.recipient = contact : p.sender = contact;
 
     pays.unshift(p);
-    return p;
+    return redirect('/dashboard/pays');
 }
 
 export async function calculateStatus(payType: 'request' | 'pay', date: Date): Promise<'pending' | 'paid'> {

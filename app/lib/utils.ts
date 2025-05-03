@@ -101,7 +101,7 @@ export const createRandomPays = ({
   recipient,
   maxPayAmount=250000,
   start='2024-06-01',
-  end='2025-05-31',
+  end='2025-05-01',
   status
 }: CreateRandomPaysArgs): Pay[] => {
 
