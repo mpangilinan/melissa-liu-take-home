@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { user } from './placeholder-data';
 import { Pay } from './definitions';
 import { v4 as uuidv4 } from 'uuid';
-import { fetchContacts, pays } from './data';
+import { fetchContacts, fetchPayById, pays } from './data';
 import { redirect } from 'next/navigation';
 
 const FormSchema = z.object({
@@ -19,7 +19,7 @@ const FormSchema = z.object({
 const CreatePay = FormSchema.omit({ id: true });
 export async function createPay(formData: FormData) {
     const contacts = await fetchContacts();
-    const { contactId, amount, payType, memo, date,  } = CreatePay.parse({
+    const { contactId, amount, payType, memo, date } = CreatePay.parse({
         contactId: formData.get('contactId'),
         amount: formData.get('amount'),
         memo: formData.get('memo'),
@@ -54,4 +54,37 @@ export async function calculateStatus(payType: 'request' | 'pay', date: Date): P
         const isDateInFuture = date > today;
         return isDateInFuture ? 'pending' : 'paid';
     }
+}
+
+const EditFormSchema = z.object({
+    id: z.string(),
+    amount: z.coerce.number(),
+    date: z.string(),
+    memo: z.string().max(64),
+    payType: z.enum(['request', 'pay']),
+});
+
+const EditPay = EditFormSchema;
+export async function editPay(formData: FormData) {
+    const { amount, payType, memo, date, id } = EditPay.parse({
+        id: formData.get('id'),
+        amount: formData.get('amount'),
+        memo: formData.get('memo'),
+        date: formData.get('date'),
+        payType: formData.get('payType')
+    });
+    const amountInCents = amount * 100;
+    const status = await calculateStatus(payType, new Date(date));
+    const pay = await fetchPayById(id);
+
+    const p: Pay = {
+        ...pay,
+        amount: amountInCents,
+        status,
+        date,
+        memo: memo,
+    };
+
+    pays.map(pay => (pay.id === id) ? p : pay);
+    return redirect('/dashboard/pays');
 }

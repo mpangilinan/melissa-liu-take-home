@@ -63,8 +63,22 @@ There are `TODO`s. Try to get to them all.
 
 ## Bootstrap instructions
 
+to start app:
+
 ```
 npm run dev
+```
+
+to run unit tests:
+
+```
+npm test
+```
+
+or run tests for single file
+
+```
+npm test app/lib/__tests__/utils.test.tsx
 ```
 
 some libraries I installed:
@@ -75,12 +89,7 @@ some libraries I installed:
 
 ## Design considerations
 
-_Replace this: I decided to build X for Y reasons..._
-
-- Wallets
-- Amount
-- Potential enhancements
-- Miscellaneous
+[Current take home summary of changes](https://docs.google.com/document/d/1nmQ-gmXiYJYO7dGFHplTOxhrPp-3igUBcZxC30XTKSU/edit?usp=sharing)
 
 ## Assumptions
 

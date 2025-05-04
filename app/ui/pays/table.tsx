@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { UpdatePay, DeletePay } from '@/app/ui/pays/buttons';
 import { fetchFilteredPays } from '@/app/lib/data';
 import { formatCurrency } from '@/app/lib/utils';
+import { user } from '@/app/lib/placeholder-data';
 
 export default async function PaysTable({
   query,
@@ -32,9 +33,9 @@ export default async function PaysTable({
                         height={28}
                         alt={`${pay.sender.name}'s profile picture`}
                       />
-                      <p>{pay.name}</p>
+                      <p>{pay.sender.name}</p>
                     </div>
-                    <p className="text-sm text-gray-500">{pay.email}</p>
+                    <p className="text-sm text-gray-500">{pay.sender.email}</p>
                   </div>
                 </div>
                 <div className="flex w-full items-center justify-between pt-4">
@@ -129,15 +130,20 @@ export default async function PaysTable({
                     </div>
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                    {(pay.sender.id === user.id || pay.recipient.id === user.id) &&
                     <div className="flex justify-end gap-3">
                       <UpdatePay id={pay.id} />
                       <DeletePay id={pay.id} />
                     </div>
+}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          {pays.length === 0 && (
+                <p>No pay results found.</p>
+              )}  
         </div>
       </div>
     </div>
