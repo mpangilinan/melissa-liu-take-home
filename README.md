@@ -66,6 +66,8 @@ There are `TODO`s. Try to get to them all.
 to start app:
 
 ```
+git clone https://github.com/mpangilinan/melissa-liu-take-home.git
+git checkout pays
 npm run dev
 ```
 
@@ -84,8 +86,8 @@ npm test app/lib/__tests__/utils.test.tsx
 some libraries I installed:
 
 - @types/uuid, for generating UUIDs
-- jest, for mocking data in unit tests
-- eslint, for lint warnings
+- @jest, for mocking data in unit tests
+- @eslint, for lint warnings
 
 ## Design considerations
 
